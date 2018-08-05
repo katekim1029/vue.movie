@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Step 1. Vanilla Js</title>
+<style>
+</style>
+
+</head>
+<body>
+
+<header class="header">
+    <h1>Daily Movie</h1>
+</header>
+
+<div class="search">
+    <form>
+        <input type="date" id="targetDate" max="" />
+    </form>
+    <a href="#" id="favorBtn">즐겨찾기 목록 보기</a>
+</div>
+
+<div class="content">
+    <div id="movieList">
+    </div>
+    <div id="movieView">
+    </div>
+    <div id="movieFavor">
+</div>
+</div>
+
+<script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
+<script>
+const listElem = document.querySelector("#movieList");
+const viewElem = document.querySelector("#movieView");
+const favorElem = document.querySelector("#movieFavor");
+
+document.addEventListener('DOMContentLoaded', () => {
+    listElem.style.display = 'block';
+    viewElem.style.display = 'none';
+    favorElem.style.display = 'none';
+    addEvents();
+});
+
+function addEvents() {
+    const favorBtn = document.querySelector("#favorBtn");
+    const dateElem = document.querySelector("#targetDate");
+    const todayDate = new Date().toISOString().slice(0,10);
+
+    dateElem.setAttribute('max', todayDate);
+    dateElem.addEventListener('change', e => {
+        let targetDate = e.target.value;
+        targetDate = targetDate.split('-').join('');
+        updateListData(targetDate);
+    });
+
+    favorBtn.addEventListener('click', e => {
+        updateFavorHtml();
+    });
+}
+
+function updateFavorHtml() {
+    let html = "";
+    html += "<ul>"
+    Object.keys(localStorage).forEach(key => {
+        let result = JSON.parse(localStorage.getItem(key));
+        html += `<li><a href="#" data-key="${ result.movieCd }" data-from="favor">
+            ${ result.movieNm }
+        </a><button type="button">삭제</button></li>`;
+    });
+    html += "</ul>";
+    viewElem.style.display = 'none';
+    listElem.style.display = 'none';
+    favorElem.style.display = "block";
+    favorElem.innerHTML = html;
+
+    Array.from(favorElem.querySelectorAll('a')).forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            updateViewData(this.dataset.key, this.dataset.from);
+        });
+    });
+    Array.from(favorElem.querySelectorAll('button')).forEach(link => {
+        link.addEventListener('click', function(e) {
+            deleteFavorData(this.previousSibling.dataset.key);
+        });
+    });
+}
+
+function deleteFavorData(key) {
+    localStorage.removeItem(key);
+    updateFavorHtml();
+}
+
+function updateListData(targetDate) {
+    const key = "06f5b3df94419d30ccbc9a117c93d95b";
+    const host = "http://www.kobis.or.kr";
+    const daily = "/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
+    const param = {
+        "key" : key,
+        "targetDt" : targetDate
+    };
+    axios.get(host + daily, {
+        params: param
+    })
+    .then( response => {
+        updateListHtml(response.data);
+    } );
+    //.catch( response => { console.log(response) } );
+}
+
+function updateListHtml(data) {
+    const result = data.boxOfficeResult.dailyBoxOfficeList;
+    let html = "";
+    html += "<ul>"
+    for (let key in result) {
+        html += `<li><a href="#" data-key="${ result[key].movieCd }" data-from="list">
+            ${ result[key].rank } /
+            ${ result[key].movieNm }
+        </a></li>`
+    }
+    html += "</ul>";
+    viewElem.style.display = 'none';
+    favorElem.style.display = 'none';
+    listElem.style.display = "block";
+    listElem.innerHTML = html;
+    Array.from(listElem.querySelectorAll('a')).forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            updateViewData(this.dataset.key, this.dataset.from);
+        });
+    });
+}
+
+function updateViewData(targetKey, from) {
+    const key = "06f5b3df94419d30ccbc9a117c93d95b";
+    const host = "http://www.kobis.or.kr";
+    const info = "/kobisopenapi/webservice/rest/movie/searchMovieInfo.json";
+    const param = {
+        "key" : key,
+        "movieCd" : targetKey
+    };
+    axios.get(host + info, {
+        params: param
+    })
+    .then( response => {
+        updateViewHtml(response.data, from);
+    } );
+    //.catch( response => { console.log(response) } );
+}
+
+function updateViewHtml(data, from) {
+    const result = data.movieInfoResult.movieInfo;
+    const actorList = (result.actors.map(a => a.peopleNm)).join(' / ');
+    const docFrag = document.createDocumentFragment();
+    const backBtn = document.createElement('button');
+    const favorBtn = document.createElement('button');
+    backBtn.id = "goToList";
+    backBtn.innerHTML = "목록으로 가기";
+    docFrag.appendChild(backBtn);
+    favorBtn.id = "addFavorite";
+    favorBtn.innerHTML = "즐겨찾기 추가";
+    docFrag.appendChild(favorBtn);
+    let html = "";
+    html += "<dl>"
+    html += `
+            <dt>영화</dt>
+            <dd>${ result.movieNm } </dd>
+            <dd>${ result.movieNmEn }</dd>
+            <dt>개봉연도</dt>
+            <dd>${ result.openDt }</dd>
+            <dt>상영시간</dt>
+            <dd>${ result.showTm }</dd>
+            <dt>제작국가</dt>
+            <dd>${ result.nations[0].nationNm }</dd>
+            <dt>감독</dt>
+            <dd>${ result.directors[0].peopleNm }</dd>
+            <dt>배우들</dt>
+            <dd>${ actorList }</dd>
+            `;
+    html += "</dl>"
+    console.log(result);
+    listElem.style.display = 'none';
+    favorElem.style.display = 'none';
+    viewElem.style.display = 'block';
+    viewElem.innerHTML = html;
+    viewElem.appendChild(docFrag);
+    console.log(from);
+    if(from === "favor") {
+
+        backBtn.style.display = 'none';
+        favorBtn.style.display = 'none';
+        return;
+    }
+    backBtn.addEventListener('click', e => {
+        html = "";
+        viewElem.style.display = 'none';
+        listElem.style.display = 'block';
+    });
+    favorBtn.addEventListener('click', e => {
+        const movieInfo = { movieCd: result.movieCd, movieNm: result.movieNm };
+        localStorage.setItem(result.movieCd, JSON.stringify(movieInfo));
+    });
+}
+
+</script>
+</body>
+</html>
