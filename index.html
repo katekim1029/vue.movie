@@ -5,60 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>Step 1. Vanilla Js</title>
-<link href="https://fonts.googleapis.com/css?family=Do+Hyeon|Sunflower:300" rel="stylesheet">
+<link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Do+Hyeon|Sunflower:300">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-<style>
-/* reset */
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,textarea,button {margin:0;padding:0}
-fieldset,img {border:0 none}
-dl,ul,ol,menu,li {list-style:none}
-blockquote, q {quotes: none}
-blockquote:before, blockquote:after,q:before, q:after {content:'';content:none}
-input,select,textarea,button {vertical-align:middle}
-button {border:0 none;background-color:transparent;cursor:pointer}
-table {border-collapse:collapse;border-spacing:0}
-body {background:#fff}
-body,th,td,input,select,textarea,button {font-size:12px;line-height:1.5;font-family:'Sunflower',sans-serif;color:#333}
-a {color:#333;text-decoration:none}
-a:active, a:hover {text-decoration:underline}
-address,caption,cite,code,dfn,em,var {font-style:normal;font-weight:normal}
-caption,legend {position:absolute;top:-9999px;left:-9999px;font-size:0px;line-height:0}
-article,aside,details,figcaption,figure,footer,header,hgroup,nav,section,main {display:block}
-*,*:before,*:after {box-sizing:border-box}
-body {-webkit-text-size-adjust:none}
-input[type='text'],input[type='password'],input[type='submit'],input[type='search'] {-webkit-appearance:none; border-radius:0}
-input:checked[type='checkbox'] {-webkit-appearance:checkbox}
-button,input[type='button'],input[type='submit'],input[type='reset'],input[type='file'] {-webkit-appearance:button;border-radius:0}
-input[type='search']::-webkit-search-cancel-button {-webkit-appearance:none}
-.hide {position:absolute;overflow:hidden;clip:rect(0 0 0 0);margin:-1px;width:1px;height:1px}
-.container {max-width:500px;margin:0 auto;}
-.header {height:50px;}
-.header .title {padding-left:10px;background:#333;color:#fff;font-size:30px;text-align:center;line-height:50px;}
-.list-menu {overflow:hidden;margin-top:20px;}
-.list-menu li {float:left;width:50%;}
-.list-menu li:first-of-type a {border-right:0;}
-.list-menu a {display:block;height:50px;line-height:50px;text-align:center;font-size:20px;border:1px solid #333;text-decoration:none;}
-.list-menu .on a {background:#eee;font-weight:bold;}
-.cont {min-height: calc(100vh - 140px);margin-top:20px;padding:20px;border:1px solid #333;}
-.search {margin-bottom:15px;}
-.search .inp-date {width:100%;height:40px;font-size:17px;text-indent:10px;}
-.list-movie {}
-.list-movie li {position:relative;margin:10px 0;padding-left:40px;border-bottom:1px solid #eee;font-size:20px;}
-.list-movie i {position:absolute;left:0;}
-.list-movie + .btn-set {margin-top:20px;}
-.list-favor {margin-top:55px;}
-.list-favor li {position:relative;margin:10px 0;padding-left:24px;border-bottom:1px solid #eee;font-size:20px;}
-.list-favor li:last-of-type {border-bottom:0;}
-.list-favor .btn-delete {position:absolute;top:7px;left:0;}
-.list-favor + .btn-set {margin-top:20px;}
-.detail-movie {}
-.detail-movie dt {padding-top:15px;border-top:1px solid #eee;font-size:20px;}
-.detail-movie dt:first-of-type {border-top:0;}
-.detail-movie dd {font-size:20px;}
-.detail-movie + .btn-set {margin-top:20px;}
-.btn-set button {width:100%;height:40px;background:#666;color:#fff;font-size:15px;}
-</style>
-
+<link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body>
 
@@ -80,9 +29,9 @@ input[type='search']::-webkit-search-cancel-button {-webkit-appearance:none}
     </nav>
 
     <div class="content">
-        <div class="cont" id="listBox">
-            <div class="search">
-                <input type="date" id="targetDate" max="" placeholder="날짜를 선택하세요" class="inp-date" />
+        <div class="cont" id="listBox" style="display:block;">
+            <div class="search" id="searchForm">
+                <input type="date" placeholder="날짜를 선택하세요" class="inp-date">
             </div>
             <div id="movieList"></div>
         </div>
@@ -98,7 +47,8 @@ input[type='search']::-webkit-search-cancel-button {-webkit-appearance:none}
 
 
 <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
-<script>
+<script type="module" src="./js/app.js"></script>
+<!-- script>
 const menuBox = document.querySelector("#menuBox");
 const listBox = document.querySelector("#listBox");
 const viewBox = document.querySelector("#viewBox");
@@ -288,6 +238,6 @@ function clearFavorData() {
     alert("모두 삭제되었습니다!");
     updateFavorHtml();
 }
-</script>
+</script -->
 </body>
 </html>
