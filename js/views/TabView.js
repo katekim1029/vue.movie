@@ -17,7 +17,7 @@ TabView.setup = function(elem) {
 
 TabView.setActiveTab = function(tabName) {
     Array.from(this.elem.querySelectorAll('a')).forEach(anchor => {
-        anchor.parentNode.className = anchor.innerHTML === tabName ? 'on' : '';
+        anchor.parentNode.className = anchor.innerHTML === tabName ? 'active' : '';
     });
 }
 

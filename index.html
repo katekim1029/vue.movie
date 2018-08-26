@@ -17,30 +17,33 @@
         <h1 class="title">오늘의 영화</h1>
     </header>
 
-    <nav class="menu" id="menuBox">
-        <ul class="list-menu">
+    <nav class="menu-box" id="tabs">
+        <ul class="menu-list">
             <li>
-                <a href="#listBox">검색하기</a>
+                <a href="#search">검색하기</a>
             </li>
             <li>
-                <a href="#favorBox">즐겨찾기</a>
+                <a href="#favor">즐겨찾기</a>
             </li>
         </ul>
     </nav>
 
     <div class="content">
-        <div class="cont" id="listBox" style="display:block;">
-            <div class="search" id="searchForm">
+
+        <section class="cont" id="search">
+            <div class="search" id="search-form">
                 <input type="date" placeholder="날짜를 선택하세요" class="inp-date">
             </div>
-            <div id="movieList"></div>
-        </div>
-        <div class="cont" id="viewBox">
 
-        </div>
-        <div class="cont" id="favorBox">
+            <div id="search-result"></div>
+            <div id="search-view"></div>
+        </section>
 
-        </div>
+        <section class="cont" id="favor">
+            <div id="favor-list"></div>
+            <div id="favor-view"></div>
+        </section>
+
     </div>
 
 </div>

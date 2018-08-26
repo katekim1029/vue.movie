@@ -6,6 +6,7 @@ const ResultView = Object.create(View);
 
 ResultView.setup = function(elem) {
     this.init(elem);
+    return this;
 }
 
 ResultView.message = {
@@ -14,24 +15,32 @@ ResultView.message = {
 
 ResultView.render = function(data = []) {
     const result = data.boxOfficeResult.dailyBoxOfficeList;
-    this.elem.innerHTML = result.length ? this.getSearchResultHtml(result) : this.message.NO_RESULT;
+    this.elem.innerHTML = result.length ? this.getResultHtml(result) : this.message.NO_RESULT;
+    this.bindClickEvent();
     this.show();
 }
 
-ResultView.getSearchResultHtml = function(data) {
+ResultView.getResultHtml = function(data) {
     return data.reduce((html, item) => {
-        html += this.getSearchItemHtml(item)
+        html += `<li>
+            <a href="#" data-key="${ item.movieCd }">
+                <i>${ item.rank } /</i>
+                ${ item.movieNm }
+            </a>
+        </li>`;
         return html;
     }, '<ul class="list-movie">') + '</ul>';
 }
 
-ResultView.getSearchItemHtml = function(item) {
-    return `<li>
-        <a href="#" data-key="${ item.movieCd }">
-            <i>${ item.rank } /</i>
-            ${ item.movieNm }
-        </a>
-    </li>`;
+ResultView.bindClickEvent = function() {
+    Array.from(this.elem.querySelectorAll('a')).forEach(anchor => {
+        anchor.addEventListener('click', e => this.onClickItem(e));
+    });
+}
+
+ResultView.onClickItem = function(e) {
+    const {key} = e.currentTarget.dataset;
+    this.emit('@click', {key});
 }
 
 export default ResultView;
