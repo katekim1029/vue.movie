@@ -24,7 +24,7 @@ export default {
     },
 
     show() {
-        this.elem.style.display = '';
+        this.elem.style.display = 'block';
         return this;
     }
 }

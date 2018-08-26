@@ -15,27 +15,32 @@ MovieView.message = {
 
 MovieView.render = function(data = []) {
     const result = data.movieInfoResult.movieInfo;
-    this.elem.innerHTML = !!result ? this.getResultHtml(result) : this.message.NO_RESULT;
-    this.bindClickEvent(result);
+    if(!!result) {
+        this.elem.innerHTML = this.getResultHtml(result);
+        this.bindClickEvent(result);
+    }
+    else {
+        this.elem.innerHTML = this.message.NO_RESULT;
+    }
     this.show();
 }
 
 MovieView.getResultHtml = function(data) {
     const actors = (data.actors.map(a => a.peopleNm)).join(' / ');
     return `<dl class="detail-movie">
-            <dt>영화제목</dt>
-            <dd>${ data.movieNm } </dd>
-            <dd>${ data.movieNmEn }</dd>
-            <dt>개봉연도</dt>
-            <dd>${ data.openDt }</dd>
-            <dt>상영시간</dt>
-            <dd>${ data.showTm }</dd>
-            <dt>제작국가</dt>
-            <dd>${ data.nations[0].nationNm }</dd>
-            <dt>감독</dt>
-            <dd>${ data.directors[0].peopleNm }</dd>
-            <dt>배우들</dt>
-            <dd>${ actors }</dd>
+                <dt>영화제목</dt>
+                <dd>${ data.movieNm } </dd>
+                <dd>${ data.movieNmEn }</dd>
+                <dt>개봉연도</dt>
+                <dd>${ data.openDt }</dd>
+                <dt>상영시간</dt>
+                <dd>${ data.showTm }</dd>
+                <dt>제작국가</dt>
+                <dd>${ data.nations[0].nationNm }</dd>
+                <dt>감독</dt>
+                <dd>${ data.directors[0].peopleNm }</dd>
+                <dt>배우들</dt>
+                <dd>${ actors }</dd>
             </dl>
             <div class="btn-set">
                 <button type="button" class="btn-add">즐겨찾기 추가</button>

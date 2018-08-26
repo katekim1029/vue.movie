@@ -4,13 +4,20 @@ export default {
         localStorage.setItem(key, JSON.stringify(data));
     },
 
+    list() {
+        const data = [];
+        if(localStorage.length === 0 ) { return; }
+        Object.keys(localStorage).forEach(key => {
+            data.push(JSON.parse(localStorage.getItem(key)));
+        });
+        return data;
+    },
+
     delete(key) {
         localStorage.removeItem(key);
-        alert("삭제되었습니다!");
     },
 
     clear() {
         localStorage.clear();
-        alert("모두 삭제되었습니다!");
     },
 }

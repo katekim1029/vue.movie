@@ -23,11 +23,11 @@ ResultView.render = function(data = []) {
 ResultView.getResultHtml = function(data) {
     return data.reduce((html, item) => {
         html += `<li>
-            <a href="#" data-key="${ item.movieCd }">
-                <i>${ item.rank } /</i>
-                ${ item.movieNm }
-            </a>
-        </li>`;
+                    <a href="#" data-key="${ item.movieCd }">
+                        <i>${ item.rank } /</i>
+                        ${ item.movieNm }
+                    </a>
+                </li>`;
         return html;
     }, '<ul class="list-movie">') + '</ul>';
 }
