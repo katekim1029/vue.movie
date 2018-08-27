@@ -1,11 +1,11 @@
 import TabView from '../views/TabView.js';
 import FormView from '../views/FormView.js';
 import ResultView from '../views/ResultView.js';
-import FavorView from '../views/FavorView.js';
+import FavoriteView from '../views/FavoriteView.js';
 import MovieView from '../views/MovieView.js';
 
 import SearchModel from '../models/SearchModel.js';
-import FavorModel from '../models/FavorModel.js';
+import FavoriteModel from '../models/FavoriteModel.js';
 
 const tag= '[MainController]';
 
@@ -20,7 +20,7 @@ export default {
         ResultView.setup(document.querySelector('#search-result'))
             .on('@click', e => this.onClickMovie(e.detail.key));
 
-        FavorView.setup(document.querySelector('#favor'))
+        FavoriteView.setup(document.querySelector('#favor'))
             .on('@click', e => this.onClickMovie(e.detail.key))
             .on('@delete', e => this.onClickDelete(e.detail.key))
             .on('@clear', e => this.onClickClear());
@@ -36,15 +36,13 @@ export default {
         TabView.setActiveTab(this.selectedTab);
         if(this.selectedTab === '검색하기') {
             document.querySelector('#search').style.display = 'block';
-            MovieView.hide();
-            FavorView.hide();
+            FavoriteView.hide();
         }
         else {
             document.querySelector('#search').style.display = 'none';
-            MovieView.hide();
-            FavorView.hide();
             this.fetchFavorList();
         }
+        MovieView.hide();
     },
 
     fetchFavorList() {
@@ -53,37 +51,41 @@ export default {
 
     search(query) {
         SearchModel.list(query).then(response => {
-            MovieView.hide();
-            ResultView.render(response.data);
+            this.onSearchResult(response.data);
         });
     },
 
     list() {
-        const data = FavorModel.list();
-        FavorView.render(data);
+        const data = FavoriteModel.list();
+        FavoriteView.render(data);
     },
 
     view(query) {
+        if(!SearchModel.isResolved) { return; }
         SearchModel.view(query).then(response => {
-            document.querySelector('#search').style.display = 'none';
-            FavorView.hide();
+            SearchModel.isResolved = true;
             MovieView.render(response.data);
         });
     },
 
     add(key, data) {
-        FavorModel.add(key, data);
+        FavoriteModel.add(key, data);
         alert("추가되었습니다!");
     },
 
     delete(key) {
-        FavorModel.delete(key);
+        FavoriteModel.delete(key);
         alert("삭제되었습니다!");
     },
 
     clear() {
-        FavorModel.clear();
+        FavoriteModel.clear();
         alert("모두 삭제되었습니다!");
+    },
+
+    onSearchResult(data) {
+        MovieView.hide();
+        ResultView.render(data);
     },
 
     onSubmit(input) {
@@ -92,11 +94,13 @@ export default {
     },
 
     onChangeTab(tabName) {
-        this.selectedTab = tabName
-        this.renderView()
+        this.selectedTab = tabName;
+        this.renderView();
     },
 
     onClickMovie(key) {
+        document.querySelector('#search').style.display = 'none';
+        FavoriteView.hide();
         this.view(key);
     },
 

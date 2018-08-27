@@ -1,17 +1,19 @@
+const MOVIE = {
+    KEY: "06f5b3df94419d30ccbc9a117c93d95b",
+    HOST: "http://www.kobis.or.kr",
+    DAILY: "/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json",
+    INFO : "/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
+}
+
 export default {
-    MOVIE: {
-        KEY: "06f5b3df94419d30ccbc9a117c93d95b",
-        HOST: "http://www.kobis.or.kr",
-        DAILY: "/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json",
-        INFO: "/kobisopenapi/webservice/rest/movie/searchMovieInfo.json"
-    },
+    isResolved: true,
 
     list(targetDate) {
         const param = {
-            "key" : this.MOVIE.KEY,
+            "key" : MOVIE.KEY,
             "targetDt" : targetDate
         };
-        return axios.get(this.MOVIE.HOST + this.MOVIE.DAILY, {
+        return axios.get(MOVIE.HOST + MOVIE.DAILY, {
             params: param
         });
         // .then(response => {
@@ -21,10 +23,11 @@ export default {
 
     view(targetKey) {
         const param = {
-            "key" : this.MOVIE.KEY,
+            "key" : MOVIE.KEY,
             "movieCd" : targetKey
         };
-        return axios.get(this.MOVIE.HOST + this.MOVIE.INFO, {
+        this.isResolved = false;
+        return axios.get(MOVIE.HOST + MOVIE.INFO, {
             params: param
         });
         // .then(response => {

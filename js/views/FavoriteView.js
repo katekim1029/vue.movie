@@ -1,19 +1,19 @@
 import View from './View.js';
 
-const tag = '[FavorView]';
+const tag = '[FavoriteView]';
 
-const FavorView = Object.create(View);
+const FavoriteView = Object.create(View);
 
-FavorView.setup = function(elem) {
+FavoriteView.setup = function(elem) {
     this.init(elem);
     return this;
 }
 
-FavorView.message = {
+FavoriteView.message = {
     NO_RESULT: '즐겨찾기 항목이 없습니다'
 }
 
-FavorView.render = function(data = []) {
+FavoriteView.render = function(data = []) {
     const result = data;
     if(result.length) {
         this.elem.innerHTML = this.getResultHtml(result);
@@ -25,7 +25,7 @@ FavorView.render = function(data = []) {
     this.show();
 }
 
-FavorView.getResultHtml = function(data) {
+FavoriteView.getResultHtml = function(data) {
     let html = '';
     html += data.reduce((html, item) => {
         html += `<li data-key="${ item.movieCd }">
@@ -42,7 +42,7 @@ FavorView.getResultHtml = function(data) {
     return html;
 }
 
-FavorView.bindClickEvent = function() {
+FavoriteView.bindClickEvent = function() {
     Array.from(this.elem.querySelectorAll('a')).forEach(anchor => {
         anchor.addEventListener('click', e => this.onClickItem(e));
     });
@@ -52,18 +52,18 @@ FavorView.bindClickEvent = function() {
     this.elem.querySelector('.btn-clear').addEventListener('click', e => this.onClickClear(e));
 }
 
-FavorView.onClickItem = function(e) {
+FavoriteView.onClickItem = function(e) {
     const {key} = e.currentTarget.parentNode.dataset;
     this.emit('@click', {key});
 }
 
-FavorView.onClickDelete = function(e) {
+FavoriteView.onClickDelete = function(e) {
     const {key} = e.currentTarget.parentNode.dataset;
     this.emit('@delete', {key});
 }
 
-FavorView.onClickClear = function(e) {
+FavoriteView.onClickClear = function(e) {
     this.emit('@clear');
 }
 
-export default FavorView;
+export default FavoriteView;
