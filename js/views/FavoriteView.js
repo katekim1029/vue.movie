@@ -44,21 +44,25 @@ FavoriteView.getResultHtml = function(data) {
 
 FavoriteView.bindClickEvent = function() {
     Array.from(this.elem.querySelectorAll('a')).forEach(anchor => {
-        anchor.addEventListener('click', e => this.onClickItem(e));
+        anchor.addEventListener('click', e => {
+            e.stopPropagation();
+            this.onClickItem(anchor.parentElement.dataset.key);
+        });
     });
-    Array.from(this.elem.querySelectorAll('.btn-delete')).forEach(button => {
-        button.addEventListener('click', e => this.onClickDelete(e));
+    Array.from(this.elem.querySelectorAll('.btn-delete')).forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            this.onClickDelete(btn.parentElement.dataset.key);
+        });
     });
     this.elem.querySelector('.btn-clear').addEventListener('click', e => this.onClickClear(e));
 }
 
-FavoriteView.onClickItem = function(e) {
-    const {key} = e.currentTarget.parentNode.dataset;
+FavoriteView.onClickItem = function(key) {
     this.emit('@click', {key});
 }
 
-FavoriteView.onClickDelete = function(e) {
-    const {key} = e.currentTarget.parentNode.dataset;
+FavoriteView.onClickDelete = function(key) {
     this.emit('@delete', {key});
 }
 
