@@ -1,5 +1,6 @@
-import MainController from './controllers/MainController.js'
-
-document.addEventListener('DOMContentLoaded', () => {
-    MainController.init();
+new Vue({
+    el: '#app',
+    data: {
+        msg: 'hello world'
+    }
 });
