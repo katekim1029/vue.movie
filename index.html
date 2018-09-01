@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>Step 2. Vue Component</title>
+<title>Step 2. Vue</title>
 <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Do+Hyeon|Sunflower:300">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="./style.css">
@@ -12,9 +12,100 @@
 <body>
 
 <div class="container" id="app">
-    {{msg}}
-</div>
+    
+    <header class="header">
+        <h1 class="title">오늘의 영화</h1>
+    </header>
 
+    <nav class="menu-box" id="tabs">
+        <ul class="menu-list">
+            <li v-for="tab in tabs" v-bind:class="{active: tab.text === selectedTab}">
+                <a v-bind:href="tab.link" v-on:click.prevent="onClickTab(tab.text)">{{ tab.text }}</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+
+        <section class="cont" id="search" v-if="(selectedTab === tabs[0].text) && !selected">
+            <div class="search" id="search-form">
+                <input type="date" v-model="movieDate" v-on:change="onChange" placeholder="날짜를 선택하세요" class="inp-date">
+            </div>
+            <div v-if="submitted">
+                <div v-if="searchResult.length" id="search-result">
+                    <ul class="list-movie">
+                        <li v-for="item in searchResult">
+                            <a href="#" v-on:click="onClickMovie(item.movieCd)">
+                                <i>{{ item.rank }}</i>
+                                {{ item.movieNm }}
+                            </a>       
+                        </li>
+                    </ul>
+                </div>
+                <div v-else>
+                    검색 결과가 없습니다
+                </div>
+            </div>
+        </section>
+
+        <section class="cont" id="favor" v-if="(selectedTab === tabs[1].text) && !selected">
+            <div v-if="favoriteList.length">
+                <ul class="list-favor">
+                    <li v-for="item in favoriteList">
+                        <button type="button" class="btn-delete" v-on:click="onClickDelete(item.movieCd)"><i class="fas fa-minus-circle fa-lg"></i></button>
+                        <a href="#" v-on:click="onClickMovie(item.movieCd)">{{ item.movieNm }}</a>
+                    </li>
+                </ul>
+                <div class="btn-set">
+                    <button type="button" class="btn-clear" v-on:click="onClickClear">즐겨찾기 모두 삭제</button>
+                </div>
+            </div>
+            <div v-else>
+                즐겨찾기 항목이 없습니다
+            </div>
+        </section>
+        
+        <section class="cont" id="movie" v-if="selected">
+            <div v-if="!!selectedMovie">
+                <dl class="detail-movie">
+                    <dt>영화제목</dt>
+                    <dd>{{ selectedMovie.movieNm }}</dd>
+                    <dd>{{ selectedMovie.movieNmEn }}</dd>
+                    <dt>개봉연도</dt>
+                    <dd>{{ selectedMovie.openDt }}</dd>
+                    <dt>상영시간</dt>
+                    <dd>{{ selectedMovie.showTm }}</dd>
+                    <dt>제작국가</dt>
+                    <dd>
+                        <span v-for="nation in selectedMovie.nations">
+                            {{ nation.nationNm }}
+                        </span>
+                    </dd>
+                    <dt>감독</dt>
+                    <dd>
+                        <span v-for="director in selectedMovie.directors">
+                            {{ director.peopleNm }}
+                        </span>
+                    </dd>
+                    <dt>배우들</dt>
+                    <dd>
+                        <span v-for="actor in selectedMovie.actors">
+                            {{ actor.peopleNm }} /
+                        </span>
+                    </dd>
+                </dl>
+                <div class="btn-set" v-if="(selectedTab === tabs[0].text)">
+                    <button type="button" class="btn-add" v-on:click="onClickAdd">즐겨찾기 추가</button>
+                </div>
+            </div>
+            <div v-else>
+                영화 정보가 없습니다
+            </div>
+        </section>
+
+    </div>
+
+</div>
 
 <script src="https://npmcdn.com/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>

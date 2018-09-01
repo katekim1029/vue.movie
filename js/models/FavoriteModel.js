@@ -6,7 +6,6 @@ export default {
 
     list() {
         const data = [];
-        if(localStorage.length === 0 ) { return; }
         Object.keys(localStorage).forEach(key => {
             data.push(JSON.parse(localStorage.getItem(key)));
         });
