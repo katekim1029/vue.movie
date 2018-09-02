@@ -17,90 +17,24 @@
         <h1 class="title">오늘의 영화</h1>
     </header>
 
-    <nav class="menu-box" id="tabs">
-        <ul class="menu-list">
-            <li v-for="tab in tabs" v-bind:class="{active: tab.text === selectedTab}">
-                <a v-bind:href="tab.link" v-on:click.prevent="onClickTab(tab.text)">{{ tab.text }}</a>
-            </li>
-        </ul>
-    </nav>
+    <tabs v-bind:tabs="tabs" v-bind:selected-tab="selectedTab" v-on:@click="onClickTab"></tabs>
 
     <div class="content">
-
         <section class="cont" id="search" v-if="(selectedTab === tabs[0].text) && !selected">
-            <div class="search" id="search-form">
-                <input type="date" v-model="movieDate" v-on:change="onChange" placeholder="날짜를 선택하세요" class="inp-date">
-            </div>
+
+            <search-form v-bind:value="movieDate" v-on:@submit="onSubmit"></search-form>
+
             <div v-if="submitted">
-                <div v-if="searchResult.length" id="search-result">
-                    <ul class="list-movie">
-                        <li v-for="item in searchResult">
-                            <a href="#" v-on:click="onClickMovie(item.movieCd)">
-                                <i>{{ item.rank }}</i>
-                                {{ item.movieNm }}
-                            </a>       
-                        </li>
-                    </ul>
-                </div>
-                <div v-else>
-                    검색 결과가 없습니다
-                </div>
+                <list-area v-bind:data="searchResult" type="result" v-on:@click="onClickMovie"></list-area>
             </div>
         </section>
 
         <section class="cont" id="favor" v-if="(selectedTab === tabs[1].text) && !selected">
-            <div v-if="favoriteList.length">
-                <ul class="list-favor">
-                    <li v-for="item in favoriteList">
-                        <button type="button" class="btn-delete" v-on:click="onClickDelete(item.movieCd)"><i class="fas fa-minus-circle fa-lg"></i></button>
-                        <a href="#" v-on:click="onClickMovie(item.movieCd)">{{ item.movieNm }}</a>
-                    </li>
-                </ul>
-                <div class="btn-set">
-                    <button type="button" class="btn-clear" v-on:click="onClickClear">즐겨찾기 모두 삭제</button>
-                </div>
-            </div>
-            <div v-else>
-                즐겨찾기 항목이 없습니다
-            </div>
+            <list-area v-bind:data="favoriteList" type="favorite" v-on:@click="onClickMovie" v-on:@delete="onClickDelete" v-on:@clear="onClickClear"></list-area>
         </section>
         
-        <section class="cont" id="movie" v-if="selected">
-            <div v-if="!!selectedMovie">
-                <dl class="detail-movie">
-                    <dt>영화제목</dt>
-                    <dd>{{ selectedMovie.movieNm }}</dd>
-                    <dd>{{ selectedMovie.movieNmEn }}</dd>
-                    <dt>개봉연도</dt>
-                    <dd>{{ selectedMovie.openDt }}</dd>
-                    <dt>상영시간</dt>
-                    <dd>{{ selectedMovie.showTm }}</dd>
-                    <dt>제작국가</dt>
-                    <dd>
-                        <span v-for="nation in selectedMovie.nations">
-                            {{ nation.nationNm }}
-                        </span>
-                    </dd>
-                    <dt>감독</dt>
-                    <dd>
-                        <span v-for="director in selectedMovie.directors">
-                            {{ director.peopleNm }}
-                        </span>
-                    </dd>
-                    <dt>배우들</dt>
-                    <dd>
-                        <span v-for="actor in selectedMovie.actors">
-                            {{ actor.peopleNm }} /
-                        </span>
-                    </dd>
-                </dl>
-                <div class="btn-set" v-if="(selectedTab === tabs[0].text)">
-                    <button type="button" class="btn-add" v-on:click="onClickAdd">즐겨찾기 추가</button>
-                </div>
-            </div>
-            <div v-else>
-                영화 정보가 없습니다
-            </div>
+        <section class="cont" v-if="selected">
+            <view-area v-bind:data="selectedMovie" v-bind:selected-tab="selectedTab" v-on:@click="onClickAdd"></view-area>
         </section>
 
     </div>
@@ -112,3 +46,78 @@
 <script type="module" src="./js/app.js"></script>
 </body>
 </html>
+
+<template id="search-form">
+    <div class="search">
+        <input type="date" v-model="inputValue" v-on:change="onSubmit" placeholder="날짜를 선택하세요" class="inp-date">
+    </div>
+</template>
+
+<template id="list-area">
+    <div v-if="data.length">
+        <ul v-bind:class="listType">
+            <li v-for="item in data">
+                <button type="button" class="btn-delete" v-on:click="onDeleteList(item.movieCd)" v-if="favoriteType"><i class="fas fa-minus-circle fa-lg"></i></button>
+                <a href="#" v-on:click="onClickList(item.movieCd)">
+                    <i v-if="resultType">{{ item.rank }}</i>
+                    {{ item.movieNm }}
+                </a>       
+            </li>
+        </ul>
+        <div class="btn-set" v-if="favoriteType">
+            <button type="button" class="btn-clear" v-on:click="onClearList">즐겨찾기 모두 삭제</button>
+        </div>
+    </div>
+    <div v-else>
+        <span v-if="resultType">검색 결과가 없습니다</span>
+        <span v-if="favoriteType">즐겨찾기 항목이 없습니다</span>
+    </div>
+</template>
+
+<template id="view-area">
+    <div v-if="!!data">
+        <dl class="detail-movie">
+            <dt>영화제목</dt>
+            <dd>{{ data.movieNm }}</dd>
+            <dd>{{ data.movieNmEn }}</dd>
+            <dt>개봉연도</dt>
+            <dd>{{ data.openDt }}</dd>
+            <dt>상영시간</dt>
+            <dd>{{ data.showTm }}</dd>
+            <dt>제작국가</dt>
+            <dd>
+                <span v-for="nation in data.nations">
+                    {{ nation.nationNm }}
+                </span>
+            </dd>
+            <dt>감독</dt>
+            <dd>
+                <span v-for="director in data.directors">
+                    {{ director.peopleNm }}
+                </span>
+            </dd>
+            <dt>배우들</dt>
+            <dd>
+                <span v-for="actor in data.actors">
+                    {{ actor.peopleNm }} /
+                </span>
+            </dd>
+        </dl>
+        <div class="btn-set" v-if="resultType">
+            <button type="button" class="btn-add" v-on:click="onClickBtn">즐겨찾기 추가</button>
+        </div>
+    </div>
+    <div v-else>
+        영화 정보가 없습니다
+    </div>
+</template>
+
+<template id="tabs">
+    <nav class="menu-box">
+        <ul class="menu-list">
+            <li v-for="tab in tabs" v-bind:class="{active: tab.text === selectedTab}">
+                <a v-bind:href="tab.link" v-on:click.prevent="onClickTab(tab.text)">{{ tab.text }}</a>
+            </li>
+        </ul>
+    </nav>
+</template>

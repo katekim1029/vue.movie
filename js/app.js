@@ -1,6 +1,11 @@
 import SearchModel from './models/SearchModel.js';
 import FavoriteModel from './models/FavoriteModel.js';
 
+import FormComponent from './components/FormComponent.js';
+import ListComponent from './components/ListComponent.js';
+import ViewComponent from './components/ViewComponent.js';
+import TabComponent from './components/TabComponent.js';
+
 new Vue({
     el: '#app',
     data: {
@@ -14,6 +19,12 @@ new Vue({
         searchResult: [],
         favoriteList: [],
         selectedMovie: {}
+    },
+    components: {
+        'search-form': FormComponent,
+        'list-area': ListComponent,
+        'view-area': ViewComponent,
+        'tabs': TabComponent
     },
     created() {
         this.selectedTab = this.tabs[0].text;
@@ -33,7 +44,8 @@ new Vue({
             this.selectedTab = tab;
             this.selected = false;
         },
-        onChange(e) {
+        onSubmit(query) {
+            this.movieDate = query;
             let targetDate = this.movieDate.split('-').join('');
             this.search(targetDate);
         },
