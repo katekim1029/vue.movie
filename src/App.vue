@@ -1,24 +1,57 @@
+<template>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">오늘의 영화</h1>
+        </header>
+
+        <tab-box v-bind:tabs="tabs" v-bind:selected-tab="selectedTab" v-on:@click="onClickTab"></tab-box>
+
+        <div class="content">
+            <section class="cont" id="search" v-if="(selectedTab === tabs[0].text) && !selected">
+
+                <search-form v-bind:value="movieDate" v-on:@submit="onSubmit"></search-form>
+
+                <div v-if="submitted">
+                    <list-area v-bind:data="searchResult" type="result" v-on:@click="onClickMovie"></list-area>
+                </div>
+            </section>
+
+            <section class="cont" id="favor" v-if="(selectedTab === tabs[1].text) && !selected">
+                <list-area v-bind:data="favoriteList" type="favorite" v-on:@click="onClickMovie" v-on:@delete="onClickDelete" v-on:@clear="onClickClear"></list-area>
+            </section>
+            
+            <section class="cont" v-if="selected">
+                <view-area v-bind:data="selectedMovie" v-bind:selected-tab="selectedTab" v-on:@click="onClickAdd"></view-area>
+            </section>
+
+        </div>
+    </div>
+</template>
+
+<script>
 import SearchModel from './models/SearchModel.js';
 import FavoriteModel from './models/FavoriteModel.js';
 
-import FormComponent from './components/FormComponent.js';
-import ListComponent from './components/ListComponent.js';
-import ViewComponent from './components/ViewComponent.js';
-import TabComponent from './components/TabComponent.js';
+import FormComponent from './components/FormComponent.vue';
+import ListComponent from './components/ListComponent.vue';
+import ViewComponent from './components/ViewComponent.vue';
+import TabComponent from './components/TabComponent.vue';
 
-new Vue({
-    el: '#app',
-    data: {
-        movieDate: '',
-        submitted: false,
-        selected: false,
-        tabs: 
-            [{ text: '검색하기', link: '#search' },
-            { text: '즐겨찾기', link: '#favor' }],
-        selectedTab: '',
-        searchResult: [],
-        favoriteList: [],
-        selectedMovie: {}
+export default {
+    name: 'app',
+    data () {
+        return {
+            movieDate: '',
+            submitted: false,
+            selected: false,
+            tabs: 
+                [{ text: '검색하기', link: '#search' },
+                { text: '즐겨찾기', link: '#favor' }],
+            selectedTab: '',
+            searchResult: [],
+            favoriteList: [],
+            selectedMovie: {}
+        }
     },
     components: {
         'search-form': FormComponent,
@@ -76,4 +109,8 @@ new Vue({
             alert("모두 삭제되었습니다!");
         }
     }
-});
+}
+</script>
+
+<style lang="scss">
+</style>

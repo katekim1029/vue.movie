@@ -7,7 +7,9 @@ export default {
     list() {
         const data = [];
         Object.keys(localStorage).forEach(key => {
-            data.push(JSON.parse(localStorage.getItem(key)));
+            let string = localStorage.getItem(key);
+            if(string === 'INFO') { return; }
+            data.push(JSON.parse(string));
         });
         return data;
     },
