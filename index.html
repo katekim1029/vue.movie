@@ -17,7 +17,7 @@
         <h1 class="title">오늘의 영화</h1>
     </header>
 
-    <tabs v-bind:tabs="tabs" v-bind:selected-tab="selectedTab" v-on:@click="onClickTab"></tabs>
+    <tab-box v-bind:tabs="tabs" v-bind:selected-tab="selectedTab" v-on:@click="onClickTab"></tab-box>
 
     <div class="content">
         <section class="cont" id="search" v-if="(selectedTab === tabs[0].text) && !selected">
@@ -112,7 +112,7 @@
     </div>
 </template>
 
-<template id="tabs">
+<template id="tab-box">
     <nav class="menu-box">
         <ul class="menu-list">
             <li v-for="tab in tabs" v-bind:class="{active: tab.text === selectedTab}">

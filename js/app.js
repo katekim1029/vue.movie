@@ -24,7 +24,7 @@ new Vue({
         'search-form': FormComponent,
         'list-area': ListComponent,
         'view-area': ViewComponent,
-        'tabs': TabComponent
+        'tab-box': TabComponent
     },
     created() {
         this.selectedTab = this.tabs[0].text;

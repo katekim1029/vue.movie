@@ -1,5 +1,5 @@
 export default {
-    template: '#tabs',
+    template: '#tab-box',
     props: ['tabs', 'selectedTab'],
     methods: {
         onClickTab(tab) {
