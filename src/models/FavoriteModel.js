@@ -8,7 +8,7 @@ export default {
         const data = [];
         Object.keys(localStorage).forEach(key => {
             let string = localStorage.getItem(key);
-            if(string === 'INFO') { return; }
+            if(string.indexOf('movieCd') < 0 ) { return; }
             data.push(JSON.parse(string));
         });
         return data;
