@@ -1,12 +1,12 @@
 <template>
     <div class="container">
         <header class="header">
-            <h1 class="title">오늘의 영화</h1>
+            <h1 class="header__title">오늘의 영화</h1>
         </header>
 
         <tab-box v-bind:tabs="tabs" v-bind:selected-tab="selectedTab" v-on:@click="onClickTab"></tab-box>
 
-        <div class="content">
+        <div class="contents">
             <section class="cont" id="search" v-if="(selectedTab === tabs[0].text) && !selected">
 
                 <search-form v-bind:value="movieDate" v-on:@submit="onSubmit"></search-form>
@@ -112,5 +112,26 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.container {
+    max-width:500px;
+    margin:0 auto;
+}
+.cont {
+    min-height: calc(100vh - 140px);
+    margin-top:20px;
+    padding:20px;
+    border:1px solid #333;
+}
+.header {
+    height:50px;
+    &__title {
+        padding-left:10px;
+        background:#333;
+        color:#fff;
+        font-size:30px;
+        text-align:center;
+        line-height:50px;
+    }
+}
 </style>

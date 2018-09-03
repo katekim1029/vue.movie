@@ -1,6 +1,6 @@
 <template>
     <div v-if="!!data">
-        <dl class="detail-movie">
+        <dl class="detail">
             <dt>영화제목</dt>
             <dd>{{ data.movieNm }}</dd>
             <dd>{{ data.movieNmEn }}</dd>
@@ -28,11 +28,11 @@
             </dd>
         </dl>
         <div class="btn-set" v-if="resultType">
-            <button type="button" class="btn-add" v-on:click="onClickBtn">즐겨찾기 추가</button>
+            <button type="button" class="btn-set__add" v-on:click="onClickBtn">즐겨찾기 추가</button>
         </div>
     </div>
     <div v-else>
-        영화 정보가 없습니다
+        <p class="no-data">영화 정보가 없습니다</p>
     </div>
 </template>
 
@@ -52,5 +52,28 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.detail {
+    dt {
+        padding-top:15px;
+        border-top:1px solid #eee;
+        font-size:20px;
+        &:first-of-type {
+            border-top:0;
+        }
+    }
+    dd {
+        font-size:20px;
+    }
+}
+.btn-set {
+    margin-top:20px;
+    &__add {
+        width:100%;
+        height:40px;
+        background:#666;
+        color:#fff;
+        font-size:15px;
+    }
+}
 </style>
