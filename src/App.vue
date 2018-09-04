@@ -14,6 +14,10 @@
                 <div v-if="submitted">
                     <list-area v-bind:data="searchResult" type="result" v-on:@click="onClickMovie"></list-area>
                 </div>
+                <div v-else>
+                    <slide-image></slide-image>
+                </div>
+
             </section>
 
             <section class="cont" id="favor" v-if="(selectedTab === tabs[1].text) && !selected">
@@ -36,6 +40,7 @@ import FormComponent from './components/FormComponent.vue';
 import ListComponent from './components/ListComponent.vue';
 import ViewComponent from './components/ViewComponent.vue';
 import TabComponent from './components/TabComponent.vue';
+import SlideComponent from './components/SlideComponent.vue';
 
 export default {
     name: 'app',
@@ -57,7 +62,8 @@ export default {
         'search-form': FormComponent,
         'list-area': ListComponent,
         'view-area': ViewComponent,
-        'tab-box': TabComponent
+        'tab-box': TabComponent,
+        'slide-image': SlideComponent
     },
     created() {
         this.selectedTab = this.tabs[0].text;
